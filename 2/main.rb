@@ -50,7 +50,7 @@ onigiri = []
 time2.times do
   z = 2
   data = s[a+1].chars
-  len = data.length - 2
+  len = data.length - 1
   delay = 640 / len
   len2 = len + 1
   len2.times do
