@@ -54,49 +54,49 @@ time2.times do
   delay = 640 / len
   len.times do
     if data[z] == "1"
-      left[t] = a * 640 + delay * (z-2)
+      left[t] = a * 640 + delay * (z-1)
       t += 1
     elsif data[z] == "2"
-      down[tt] = a * 640 + delay * (z-2)
+      down[tt] = a * 640 + delay * (z-1)
       tt += 1
     elsif data[z] == "3"
-      up[ttt] = a * 640 + delay * (z-2)
+      up[ttt] = a * 640 + delay * (z-1)
       ttt += 1
     elsif data[z] == "4"
-      right[tttt] = a * 640 + delay * (z-2)
+      right[tttt] = a * 640 + delay * (z-1)
       tttt += 1
     elsif data[z] == "5"
-      onigiri[ttttt] = a * 640 + delay * (z-2)
+      onigiri[ttttt] = a * 640 + delay * (z-1)
       ttttt += 1
     elsif data[z] == "a"
-      left[t] = a * 640 + delay * (z-2)
+      left[t] = a * 640 + delay * (z-1)
       t += 1
-      up[ttt] = a * 640 + delay * (z-2)
+      up[ttt] = a * 640 + delay * (z-1)
       ttt += 1
     elsif data[z] == "b"
-      left[t] = a * 640 + delay * (z-2)
+      left[t] = a * 640 + delay * (z-1)
       t += 1
-      down[tt] = a * 640 + delay * (z-2)
+      down[tt] = a * 640 + delay * (z-1)
       tt += 1
     elsif data[z] == "c"
-      left[t] = a * 640 + delay * (z-2)
+      left[t] = a * 640 + delay * (z-1)
       t += 1
-      right[tttt] = a * 640 + delay * (z-2)
+      right[tttt] = a * 640 + delay * (z-1)
       tttt += 1
     elsif data[z] == "d"
-      down[tt] = a * 640 + delay * (z-2)
+      down[tt] = a * 640 + delay * (z-1)
       tt += 1
-      up[ttt] = a * 640 + delay * (z-2)
+      up[ttt] = a * 640 + delay * (z-1)
       ttt+= 1
     elsif data[z] == "e"
-      down[tt] = a * 640 + delay * (z-2)
+      down[tt] = a * 640 + delay * (z-1)
       tt += 1
-      right[tttt] = a * 640 + delay * (z-2)
+      right[tttt] = a * 640 + delay * (z-1)
       tttt += 1      
     elsif data[z] == "f"
-      up[ttt] = a * 640 + delay * (z-2)
+      up[ttt] = a * 640 + delay * (z-1)
       ttt += 1
-      right[tttt] = a * 640 + delay * (z-2)
+      right[tttt] = a * 640 + delay * (z-1)
       tttt += 1     
     end       
     z += 1
