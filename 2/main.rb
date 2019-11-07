@@ -48,7 +48,7 @@ right = []
 onigiri = []
 
 time2.times do
-  z = 2
+  z = 0
   data = s[a+1].chars
   len = data.length - 1
   delay = 640 / len
