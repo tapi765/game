@@ -52,8 +52,7 @@ time2.times do
   data = s[a+1].chars
   len = data.length - 1
   delay = 640 / len
-  len2 = len + 1
-  len2.times do
+  len.times do
     if data[z] == "1"
       left[t] = a * 640 + delay * (z-2)
       t += 1
