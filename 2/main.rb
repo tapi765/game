@@ -48,9 +48,9 @@ right = []
 onigiri = []
 
 time2.times do
-  z = 2
+  z = 1
   data = s[a+1].chars
-  len = data.length - 2
+  len = data.length - 1
   delay = 640 / len
   len.times do
     if data[z] == "1"
