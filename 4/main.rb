@@ -43,7 +43,7 @@ Window.load_resources do
     Window.draw(382, z-rlres, Image[:RenoR])
     Window.draw(0, 0, Image[:Reno])
 
-    a = Input.mouse_push?(M_LBUTTON)
+  
 
     if koyaku == 1
       Window.draw_font(0, 0, "リプレイ", Font.default, color: C_WHITE)
@@ -202,7 +202,7 @@ Window.load_resources do
 
 
 
-    if a == true
+    if   Input.mouse_push?(M_LBUTTON) == true || Input.key_push? == true || Input.pad_push? == true
 
       if flug1 == 0 && flug2 == 1  && flug3 == 1
         Sound[:stop].play
