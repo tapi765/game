@@ -6,12 +6,19 @@ Image.register(:RenoL, 'files/RenoL.png')
 Image.register(:RenoC, 'files/RenoC.png')
 Image.register(:RenoR, 'files/RenoR.png')
 
+Sound.register(:bet, 'sounds/bet.wav')
+Sound.register(:start, 'sounds/start.wav')
+Sound.register(:stop, 'sounds/teisi.wav')
+Sound.register(:rep, 'sounds/replay.wav')
+Sound.register(:tomato, 'sounds/tomato.wav')
+
 Window.load_resources do
   Window.bgcolor = C_BLACK
   rlres = -1038
   x = rlres
   y = rlres
   z = rlres
+  t = 0
   seigyo = [0,-48,-102,-152,-204,-258,-308,-358,-412,-464,-516,-568,-622,-672,-724,-774,-822,-876,-930,-984]
 
   flug1 = 1
@@ -35,9 +42,14 @@ Window.load_resources do
     Window.draw(382, z-rlres, Image[:RenoR])
     Window.draw(0, 0, Image[:Reno])
 
-    Window.draw_font(0, 0, koyaku, Font.default, color: C_WHITE)
-    Window.draw_font(100, 0, y, Font.default, color: C_WHITE)
-    Window.draw_font(200, 0, z, Font.default, color: C_WHITE)
+    if koyaku == 1
+      Window.draw_font(0, 0, "リプレイ", Font.default, color: C_WHITE)
+    elsif koyaku == 3
+      Window.draw_font(0, 0, "トマト", Font.default, color: C_WHITE)      
+    else
+      Window.draw_font(0, 0, "ハズレ", Font.default, color: C_WHITE)
+    end
+
     if x >= 0
       x = rlres
     end
@@ -62,20 +74,46 @@ Window.load_resources do
 
 
     if Input.key_down?(K_LEFT) && flug1 == 0
-      ans1 = seigyo.min_by{|a| (a-x).abs}
-      ansa = seigyo.index(ans1)
-      if ans1 <= x
-        x = seigyo[ansa-1]
+      Sound[:stop].play
+      if  koyaku == 1
+        r3 = [seigyo[16],seigyo[11],seigyo[6],seigyo[1]]
+        ans1 = r3.min_by{|a| (a-x).abs}
+        ansc = r3.index(ans1)
+        if ans1 <= x
+          x = r3[ansc-1]
+        else
+          x = ans1
+        end
+      elsif  koyaku == 3
+        r3 = [seigyo[17],seigyo[12],seigyo[7],seigyo[2]]
+        ans1 = r3.min_by{|a| (a-x).abs}
+        ansc = r3.index(ans1)
+        if ans1 <= x
+          x = r3[ansc-1]
+        else
+          x = ans1
+        end
       else
-        x = ans1
+        x = seigyo.min_by{|a| (a-x).abs}
       end
       flug1 = 1
     end
 
+
+
     if Input.key_down?(K_DOWN) && flug2 == 0
-      if
-        koyaku == 3
+      Sound[:stop].play
+      if  koyaku == 3
         r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[0]]
+        ans2 = r3.min_by{|a| (a-y).abs}
+        ansc = r3.index(ans2)
+        if ans2 <= y
+          y = r3[ansc-1]
+        else
+          y = ans2
+        end
+      elsif  koyaku == 1
+        r3 = [seigyo[19],seigyo[14],seigyo[9],seigyo[4]]
         ans2 = r3.min_by{|a| (a-y).abs}
         ansc = r3.index(ans2)
         if ans2 <= y
@@ -89,11 +127,20 @@ Window.load_resources do
       flug2 = 1
     end
 
+    if koyaku == 1 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0 && Input.key_down?(K_LEFT) == false
+      t = 1
+      Sound[:rep].play 
+    end
+
+    if koyaku == 3 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0 && Input.key_down?(K_LEFT) == false
+      t = 1
+      Sound[:tomato].play 
+    end
 
 
     if Input.key_down?(K_RIGHT) && flug3 == 0
-      if
-        koyaku == 3
+      Sound[:stop].play
+      if  koyaku == 3
         r3 = [seigyo[18],seigyo[13],seigyo[8],seigyo[3]]
         ans3 = r3.min_by{|a| (a-z).abs}
         ansc = r3.index(ans3)
@@ -102,13 +149,27 @@ Window.load_resources do
         else
           z = ans3
         end
-      else
-        z = seigyo.min_by{|a| (a-z).abs}
+      elsif koyaku == 1
+        r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[0]]
+        ans3 = r3.min_by{|a| (a-z).abs}
+        ansc = r3.index(ans3)
+        if ans3 <= z
+          z = r3[ansc-1]
+        else
+          z = ans3
+        end
+      else z = seigyo.min_by{|a| (a-z).abs}
       end
       flug3 = 1
     end
 
-    if Input.key_down?(K_SPACE) && flug1 == 1 && flug2 == 1 && flug3 == 1
+    if Input.key_down?(K_UP) && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
+      t = 1
+      Sound[:bet].play
+    end
+
+    if Input.key_down?(K_SPACE) && t == 1
+      Sound[:start].play
       flug1 = 0
       flug2 = 0
       flug3 = 0
@@ -121,7 +182,10 @@ Window.load_resources do
       else
         koyaku = 0
       end
-      koyaku = 3
+      t = 0
     end
+
+
+
   end
 end
