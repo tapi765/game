@@ -26,6 +26,8 @@ Window.load_resources do
   flug2 = 1
   flug3 = 1
   koyaku = 0
+  game = 0
+  samai = 0
   Window.loop do
 
     #flug = 0 回転中
@@ -43,15 +45,21 @@ Window.load_resources do
     Window.draw(382, z-rlres, Image[:RenoR])
     Window.draw(0, 0, Image[:Reno])
 
-  
+    Window.draw_box_fill(0, 0, Window.width, 50, [0,0,0])
 
     if koyaku == 1
-      Window.draw_font(0, 0, "リプレイ", Font.default, color: C_WHITE)
+      Window.draw_font(0, 15, "リプレイ", Font.default, color: C_WHITE)
     elsif koyaku == 3
-      Window.draw_font(0, 0, "トマト", Font.default, color: C_WHITE)      
+      Window.draw_font(0, 15, "トマト", Font.default, color: C_WHITE)      
     else
-      Window.draw_font(0, 0, "ハズレ", Font.default, color: C_WHITE)
+      Window.draw_font(0, 15, "ハズレ", Font.default, color: C_WHITE)
     end
+
+    Window.draw_font(200, 15, "ゲーム数:", Font.default, color: C_WHITE)
+    Window.draw_font(310, 15, game, Font.default, color: C_WHITE)
+
+    Window.draw_font(400, 15, "差枚:", Font.default, color: C_WHITE)
+    Window.draw_font(470, 15, samai, Font.default, color: C_WHITE)
 
     if x >= 0
       x = rlres
@@ -138,6 +146,7 @@ Window.load_resources do
     if koyaku == 3 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0 && Input.key_down?(K_LEFT) == false
       t = 1
       Sound[:tomato].play 
+      samai += 250
     end
 
 
@@ -168,11 +177,13 @@ Window.load_resources do
 
     if Input.key_down?(K_UP) && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
       t = 1
+      samai -= 3
       Sound[:bet].play
     end
 
     if Input.key_down?(K_SPACE) && t == 1
       Sound[:start].play
+      game += 1
       flug1 = 0
       flug2 = 0
       flug3 = 0
@@ -267,7 +278,8 @@ Window.load_resources do
   
       if koyaku == 3 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
         t = 1
-        Sound[:tomato].play 
+        Sound[:tomato].play
+        samai += 250
         break
       end
   
@@ -300,10 +312,12 @@ Window.load_resources do
       if flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
         t = 1
         Sound[:bet].play
+        samai -= 3
         break
       end
   
       if t == 1
+        game += 1
         Sound[:start].play
         flug1 = 0
         flug2 = 0
@@ -321,6 +335,8 @@ Window.load_resources do
         break
       end
     end
+
+
 
     %x{
       document.getElementById('run').addEventListener('click', function(){
