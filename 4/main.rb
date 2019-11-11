@@ -202,7 +202,7 @@ Window.load_resources do
 
 
 
-    if   Input.mouse_push?(M_LBUTTON) == true || Input.pad_push? == true
+    if   Input.mouse_push?(M_LBUTTON) == true
 
       if flug1 == 0 && flug2 == 1  && flug3 == 1
         Sound[:stop].play
