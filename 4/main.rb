@@ -201,9 +201,8 @@ Window.load_resources do
 
 
 
-
-    if   Input.mouse_push?(M_LBUTTON) == true || Input.mouse_push?(M_MBUTTON) == true || Input.mouse_push?(M_RBUTTON) == true 
-
+     if   a == true
+      a = false
       if flug1 == 0 && flug2 == 1  && flug3 == 1
         Sound[:stop].play
         if  koyaku == 1
@@ -257,18 +256,19 @@ Window.load_resources do
           y = seigyo.min_by{|a| (a-y).abs}
         end
         flug2 = 1
+        break
       end
   
       if koyaku == 1 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0 
         t = 1
         Sound[:rep].play 
-        a = false
+        break
       end
   
       if koyaku == 3 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
         t = 1
         Sound[:tomato].play 
-        a = false
+        break
       end
   
   
@@ -318,7 +318,14 @@ Window.load_resources do
           koyaku = 0
         end
         t = 0
+        break
       end
-      end
+    end
+
+    %x{
+      document.getElementById('run').addEventListener('click', function(){
+        a = true
+      });
+    }
   end
 end
