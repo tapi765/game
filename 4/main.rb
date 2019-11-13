@@ -20,7 +20,7 @@ Window.load_resources do
   z = rlres
   a = 0
   t = 0
-  seigyo = [0,-48,-102,-152,-204,-258,-308,-358,-412,-464,-516,-568,-622,-672,-724,-774,-822,-876,-930,-984]
+  seigyo = [0,-44,-102,-152,-204,-258,-302,-358,-412,-464,-516,-568,-622,-672,-724,-774,-822,-876,-930,-984]
 
   flug1 = 1
   flug2 = 1
@@ -28,6 +28,7 @@ Window.load_resources do
   koyaku = 0
   game = 0
   samai = 0
+  tmt = 0
   Window.loop do
 
     #flug = 0 回転中
@@ -39,11 +40,11 @@ Window.load_resources do
 
     Window.draw(142, x, Image[:RenoL])
     Window.draw(142, x-rlres, Image[:RenoL])
-    Window.draw(262, y, Image[:RenoC])
-    Window.draw(262, y-rlres, Image[:RenoC])
-    Window.draw(382, z, Image[:RenoR])
-    Window.draw(382, z-rlres, Image[:RenoR])
-    Window.draw(0, -28, Image[:Reno])
+    Window.draw(258, y, Image[:RenoC])
+    Window.draw(258, y-rlres, Image[:RenoC])
+    Window.draw(374, z, Image[:RenoR])
+    Window.draw(374, z-rlres, Image[:RenoR])
+    Window.draw(0, -25, Image[:Reno])
 
     Window.draw_box_fill(0, 0, Window.width, 50, [0,0,0])
 
@@ -104,6 +105,15 @@ Window.load_resources do
         else
           x = ans1
         end
+      elsif  koyaku == 0
+        r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[0]]
+        ans1 = r3.min_by{|a| (a-x).abs}
+        ansc = r3.index(ans1)
+        if ans1 <= x
+          x = r3[ansc-1]
+        else
+          x = ans1
+        end        
       else
         x = seigyo.min_by{|a| (a-x).abs}
       end
@@ -125,6 +135,15 @@ Window.load_resources do
         end
       elsif  koyaku == 1
         r3 = [seigyo[19],seigyo[14],seigyo[9],seigyo[4]]
+        ans2 = r3.min_by{|a| (a-y).abs}
+        ansc = r3.index(ans2)
+        if ans2 <= y
+          y = r3[ansc-1]
+        else
+          y = ans2
+        end
+      elsif  koyaku == 0
+        r3 = [seigyo[18],seigyo[13],seigyo[8],seigyo[3]]
         ans2 = r3.min_by{|a| (a-y).abs}
         ansc = r3.index(ans2)
         if ans2 <= y
@@ -170,6 +189,15 @@ Window.load_resources do
         else
           z = ans3
         end
+      elsif koyaku == 0
+        r3 = [seigyo[16],seigyo[11],seigyo[6],seigyo[1]]
+        ans3 = r3.min_by{|a| (a-z).abs}
+        ansc = r3.index(ans3)
+        if ans3 <= z
+          z = r3[ansc-1]
+        else
+          z = ans3
+        end
       else z = seigyo.min_by{|a| (a-z).abs}
       end
       flug3 = 1
@@ -189,6 +217,7 @@ Window.load_resources do
       flug3 = 0
       if rand(7774) <= 99
         koyaku = 3
+        tmt = rand(3)
       elsif rand(2048) <= 9
         koyaku = 2
       elsif rand(296) <= 99
@@ -199,6 +228,19 @@ Window.load_resources do
       t = 0
     end
   
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -234,6 +276,15 @@ Window.load_resources do
           else
             x = ans1
           end
+        elsif  koyaku == 0
+          r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[0]]
+          ans1 = r3.min_by{|a| (a-x).abs}
+          ansc = r3.index(ans1)
+          if ans1 <= x
+            x = r3[ansc-1]
+          else
+            x = ans1
+          end     
         else
           x = seigyo.min_by{|a| (a-x).abs}
         end
@@ -304,6 +355,24 @@ Window.load_resources do
           else
             z = ans3
           end
+        elsif koyaku == 0
+          r3 = [seigyo[16],seigyo[11],seigyo[6],seigyo[1]]
+          ans3 = r3.min_by{|a| (a-z).abs}
+          ansc = r3.index(ans3)
+          if ans3 <= z
+            z = r3[ansc-1]
+          else
+            z = ans3
+          end
+        elsif  koyaku == 0
+          r3 = [seigyo[18],seigyo[13],seigyo[8],seigyo[3]]
+          ans2 = r3.min_by{|a| (a-y).abs}
+          ansc = r3.index(ans2)
+          if ans2 <= y
+            y = r3[ansc-1]
+          else
+            y = ans2
+          end
         else z = seigyo.min_by{|a| (a-z).abs}
         end
         flug3 = 1
@@ -326,7 +395,7 @@ Window.load_resources do
           koyaku = 3
         elsif rand(2048) <= 9
           koyaku = 2
-        elsif rand(296) <= 99
+        elsif rand(296) <= 105
           koyaku = 1
         else
           koyaku = 0
