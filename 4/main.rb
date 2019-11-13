@@ -1,7 +1,7 @@
 require 'dxopal'
 include DXOpal
 
-Image.register(:Reno, 'files/Reno.png')
+Image.register(:Reno, 'files/Reno2.png')
 Image.register(:RenoL, 'files/RenoL.png')
 Image.register(:RenoC, 'files/RenoC.png')
 Image.register(:RenoR, 'files/RenoR.png')
@@ -43,7 +43,7 @@ Window.load_resources do
     Window.draw(262, y-rlres, Image[:RenoC])
     Window.draw(382, z, Image[:RenoR])
     Window.draw(382, z-rlres, Image[:RenoR])
-    Window.draw(0, 0, Image[:Reno])
+    Window.draw(0, -28, Image[:Reno])
 
     Window.draw_box_fill(0, 0, Window.width, 50, [0,0,0])
 
