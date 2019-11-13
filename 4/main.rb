@@ -299,7 +299,7 @@ Window.load_resources do
       flug2 = 0
       flug3 = 0
       if tyusen == 0
-        if rand(7774) <= 990
+        if rand(7774) <= 99
           koyaku = 3
           tmt = rand(3)
         elsif rand(2048) <= 9
