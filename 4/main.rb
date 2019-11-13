@@ -2,6 +2,7 @@ require 'dxopal'
 include DXOpal
 
 Image.register(:Reno, 'files/Reno2.png')
+Image.register(:Reno2, 'files/Reno3.png')
 Image.register(:RenoL, 'files/RenoL.png')
 Image.register(:RenoC, 'files/RenoC.png')
 Image.register(:RenoR, 'files/RenoR.png')
@@ -11,6 +12,8 @@ Sound.register(:start, 'sounds/start.wav')
 Sound.register(:stop, 'sounds/teisi.wav')
 Sound.register(:rep, 'sounds/replay.wav')
 Sound.register(:tomato, 'sounds/tomato.wav')
+Sound.register(:bonus, 'sounds/bonus.wav')
+Sound.register(:manbo, 'sounds/manbo.wav')
 
 Window.load_resources do
   Window.bgcolor = C_BLACK
@@ -20,15 +23,22 @@ Window.load_resources do
   z = rlres
   a = 0
   t = 0
-  seigyo = [0,-44,-102,-152,-204,-258,-302,-358,-412,-464,-516,-568,-622,-672,-724,-774,-822,-876,-930,-984]
-
+  seigyo = [0,-48,-102,-152,-204,-258,-306,-358,-412,-464,-516,-568,-622,-672,-724,-774,-826,-876,-930,-984]
+  flug = 0
+  flugs = 0
   flug1 = 1
   flug2 = 1
   flug3 = 1
   koyaku = 0
   game = 0
+  tmgame = 0
   samai = 0
   tmt = 0
+  gtmt = 0
+  tyusen = 0
+  bonus = 0
+  add = 0
+
   Window.loop do
 
     #flug = 0 回転中
@@ -44,23 +54,74 @@ Window.load_resources do
     Window.draw(258, y-rlres, Image[:RenoC])
     Window.draw(374, z, Image[:RenoR])
     Window.draw(374, z-rlres, Image[:RenoR])
-    Window.draw(0, -25, Image[:Reno])
+
+    if bonus == 1 || bonus == 2 
+      if flug1 + flug2 + flug3 >= 2
+         Window.draw(0, -25, Image[:Reno2])
+      else
+        Window.draw(0, -25, Image[:Reno])
+      end
+    else
+      Window.draw(0, -25, Image[:Reno])
+    end     
+
+    if flug == 1 &&  flug1 + flug2 + flug3 == 2
+      Sound[:bonus].play
+      flug = 0
+      flugs = 1
+    end
+
+    if flugs == 1 && flug1 + flug2 + flug3 == 3
+      Sound[:manbo].play
+      flugs = 0
+    end
+
+    if flug == 2 && t == 1
+      samai += 200 - add
+      add = 0
+      flug = 0
+      Sound[:manbo].stop
+      bonus = 0
+    elsif flug == 3 && t == 1
+      samai += 80 - add
+      add = 0
+      flug = 0
+      bonus = 0
+      Sound[:manbo].stop
+    end
+
+
+    if flug1 + flug2 + flug3 == 3 && bonus == 1 && t == 0
+      samai += 0.20
+      add += 0.20
+      flug = 2
+      if add >= 201
+        add = 200
+        bonus = 0
+        Sound[:manbo].stop
+      end
+    elsif flug1 + flug2 + flug3 == 3 && bonus == 2 && t == 0
+      samai += 0.20
+      add += 0.20
+      flug = 3
+      if add >= 81
+        add = 80
+        bonus = 0
+        Sound[:manbo].stop
+      end
+    end
 
     Window.draw_box_fill(0, 0, Window.width, 50, [0,0,0])
 
-    if koyaku == 1
-      Window.draw_font(0, 15, "リプレイ", Font.default, color: C_WHITE)
-    elsif koyaku == 3
-      Window.draw_font(0, 15, "トマト", Font.default, color: C_WHITE)      
-    else
-      Window.draw_font(0, 15, "ハズレ", Font.default, color: C_WHITE)
-    end
+    Window.draw_font(0, 15, "前回のトマトから", Font.default, color: C_WHITE)
+    Window.draw_font(200, 15, tmgame, Font.default, color: C_WHITE)
+    
 
-    Window.draw_font(200, 15, "ゲーム数:", Font.default, color: C_WHITE)
-    Window.draw_font(310, 15, game, Font.default, color: C_WHITE)
+    Window.draw_font(280, 15, "ゲーム数:", Font.default, color: C_WHITE)
+    Window.draw_font(390, 15, game, Font.default, color: C_WHITE)
 
-    Window.draw_font(400, 15, "差枚:", Font.default, color: C_WHITE)
-    Window.draw_font(470, 15, samai, Font.default, color: C_WHITE)
+    Window.draw_font(480, 15, "差枚:", Font.default, color: C_WHITE)
+    Window.draw_font(550, 15, samai.to_i, Font.default, color: C_WHITE)
 
     if x >= 0
       x = rlres
@@ -87,7 +148,9 @@ Window.load_resources do
 
     if Input.key_down?(K_LEFT) && flug1 == 0
       Sound[:stop].play
-      if  koyaku == 1
+      if bonus != 0
+        x = seigyo[17]
+      elsif  koyaku == 1
         r3 = [seigyo[16],seigyo[11],seigyo[6],seigyo[1]]
         ans1 = r3.min_by{|a| (a-x).abs}
         ansc = r3.index(ans1)
@@ -97,7 +160,13 @@ Window.load_resources do
           x = ans1
         end
       elsif  koyaku == 3
-        r3 = [seigyo[17],seigyo[12],seigyo[7],seigyo[2]]
+        if tmt == 0
+          r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[2]]
+        elsif tmt == 1
+          r3 = [seigyo[17],seigyo[10],seigyo[7],seigyo[0]]
+        elsif tmt == 2
+          r3 = [seigyo[15],seigyo[12],seigyo[7],seigyo[5],seigyo[0]]    
+        end
         ans1 = r3.min_by{|a| (a-x).abs}
         ansc = r3.index(ans1)
         if ans1 <= x
@@ -120,11 +189,17 @@ Window.load_resources do
       flug1 = 1
     end
 
-
+    if koyaku == 3 && flug1 == 1
+      if x == seigyo[2] || x == seigyo[7] || x == seigyo[12] || x == seigyo[17]
+        gtmt = 1
+      end
+    end
 
     if Input.key_down?(K_DOWN) && flug2 == 0
       Sound[:stop].play
-      if  koyaku == 3
+      if bonus != 0 
+        y = seigyo[16]
+      elsif  koyaku == 3
         r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[0]]
         ans2 = r3.min_by{|a| (a-y).abs}
         ansc = r3.index(ans2)
@@ -162,16 +237,23 @@ Window.load_resources do
       Sound[:rep].play 
     end
 
-    if koyaku == 3 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0 && Input.key_down?(K_LEFT) == false
+    if gtmt == 1 && Input.key_down?(K_LEFT) == false && flug1 == 1 && flug2 == 1 && flug3 == 1
       t = 1
       Sound[:tomato].play 
-      samai += 250
+      tyusen = 1
+      gtmt = 0
+      koyaku = 0
+      tmgame = 0
     end
 
 
     if Input.key_down?(K_RIGHT) && flug3 == 0
       Sound[:stop].play
-      if  koyaku == 3
+      if bonus == 1
+        z = seigyo[15]
+      elsif bonus == 2
+        z = seigyo[14]
+      elsif  koyaku == 3
         r3 = [seigyo[18],seigyo[13],seigyo[8],seigyo[3]]
         ans3 = r3.min_by{|a| (a-z).abs}
         ansc = r3.index(ans3)
@@ -212,18 +294,33 @@ Window.load_resources do
     if Input.key_down?(K_SPACE) && t == 1
       Sound[:start].play
       game += 1
+      tmgame += 1
       flug1 = 0
       flug2 = 0
       flug3 = 0
-      if rand(7774) <= 99
-        koyaku = 3
-        tmt = rand(3)
-      elsif rand(2048) <= 9
-        koyaku = 2
-      elsif rand(296) <= 99
-        koyaku = 1
-      else
+      if tyusen == 0
+        if rand(7774) <= 990
+          koyaku = 3
+          tmt = rand(3)
+        elsif rand(2048) <= 9
+          koyaku = 2
+        elsif rand(296) <= 99
+          koyaku = 1
+        else
+          koyaku = 0
+        end
+      elsif tyusen == 1
         koyaku = 0
+        if rand(87) <= 9
+          flug = 1
+          if rand(5) <= 2
+            bonus = 1
+          else 
+            bonus = 2
+          end
+        elsif rand(30) == 15 && bonus == 0
+          tyusen = 0
+        end
       end
       t = 0
     end
@@ -258,7 +355,9 @@ Window.load_resources do
       a = false
       if flug1 == 0 && flug2 == 1  && flug3 == 1
         Sound[:stop].play
-        if  koyaku == 1
+        if bonus != 0 
+          x = seigyo[17]
+        elsif koyaku == 1
           r3 = [seigyo[16],seigyo[11],seigyo[6],seigyo[1]]
           ans1 = r3.min_by{|a| (a-x).abs}
           ansc = r3.index(ans1)
@@ -268,7 +367,13 @@ Window.load_resources do
             x = ans1
           end
         elsif  koyaku == 3
-          r3 = [seigyo[17],seigyo[12],seigyo[7],seigyo[2]]
+        if tmt == 0
+          r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[2]]
+        elsif tmt == 1
+          r3 = [seigyo[17],seigyo[10],seigyo[7],seigyo[0]]
+        elsif tmt == 2
+          r3 = [seigyo[15],seigyo[12],seigyo[7],seigyo[5],seigyo[0]]    
+        end
           ans1 = r3.min_by{|a| (a-x).abs}
           ansc = r3.index(ans1)
           if ans1 <= x
@@ -296,7 +401,9 @@ Window.load_resources do
   
       if flug2 == 0 && flug3 == 1
         Sound[:stop].play
-        if  koyaku == 3
+        if bonus != 0 
+          y = seigyo[16]
+        elsif  koyaku == 3
           r3 = [seigyo[15],seigyo[10],seigyo[5],seigyo[0]]
           ans2 = r3.min_by{|a| (a-y).abs}
           ansc = r3.index(ans2)
@@ -327,17 +434,22 @@ Window.load_resources do
         break
       end
   
-      if koyaku == 3 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
+      if gtmt == 1 && flug1 == 1 && flug2 == 1 && flug3 == 1 && t == 0
         t = 1
         Sound[:tomato].play
-        samai += 250
-        break
+        tyusen = 1
+        gtmt = 0
+        koyaku = 0
       end
   
   
       if flug3 == 0
         Sound[:stop].play
-        if  koyaku == 3
+        if bonus == 1
+          z = seigyo[15]
+        elsif bonus == 2
+          z = seigyo[14]
+        elsif  koyaku == 3
           r3 = [seigyo[18],seigyo[13],seigyo[8],seigyo[3]]
           ans3 = r3.min_by{|a| (a-z).abs}
           ansc = r3.index(ans3)
@@ -385,27 +497,40 @@ Window.load_resources do
         break
       end
   
-      if t == 1
+      if t == 1        
+      Sound[:start].play
         game += 1
-        Sound[:start].play
+        tmgame += 1
         flug1 = 0
         flug2 = 0
         flug3 = 0
-        if rand(7774) <= 99
-          koyaku = 3
-        elsif rand(2048) <= 9
-          koyaku = 2
-        elsif rand(296) <= 105
-          koyaku = 1
-        else
+        if tyusen == 0
+          if rand(7774) <= 99
+            koyaku = 3
+          elsif rand(2048) <= 9
+            koyaku = 2
+          elsif rand(296) <= 99
+            koyaku = 1
+          else
+            koyaku = 0
+          end
+        elsif tyusen == 1
+          if rand(87) <= 9
+            flug = 1
+            if rand(5) <= 2
+              bonus = 1
+            else 
+              bonus = 2
+            end
+          elsif rand(30) == 15 && bonus == 0
+            tyusen = 0
+          end
+  
           koyaku = 0
         end
         t = 0
-        break
       end
     end
-
-
 
     %x{
       document.getElementById('run').addEventListener('click', function(){
