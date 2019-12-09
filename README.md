@@ -1,5 +1,5 @@
-ページを作りました。<br>
-ここから遊べます。<br>
+ページを作りました<br>
+ここから遊べます<br>
 https://mypage-tapi765.herokuapp.com/<br><br>
 
 
