@@ -1,4 +1,9 @@
-﻿﻿dxopalを使ったゲームです。<br><br>
+ページを作りました<br>
+ここから遊べます<br>
+https://mypage-tapi765.herokuapp.com/<br><br>
+
+
+dxopalを使ったゲームです。<br><br>
 
 【１】
 太鼓の達人風のゲームです。<br>
