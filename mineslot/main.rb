@@ -505,7 +505,7 @@ Window.load_resources do
           koyaku = 9
           zyoutai = 1
           gako = 1
-        elsif random <= 1334 # 1/256 BIG 1322
+        elsif random <= 13340 # 1/256 BIG 1322
           koyaku = 10
           zyoutai = 1
           gako = 1
