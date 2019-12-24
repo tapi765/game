@@ -33,4 +33,4 @@ https://tapi765.github.io/game/4/<br><br>
 【mineslot】
 オリジナルパチスロ　『mineslot』です。<br>
 まだ製作途中ですが、遊ぶことはできます。<br>
-https://tapi765.github.io/game/mineslot>
+https://tapi765.github.io/game/mineslot
