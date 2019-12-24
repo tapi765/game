@@ -7,20 +7,29 @@ Image.register(:RenoC, 'files/C.png')
 Image.register(:RenoR, 'files/R.png')
 Image.register(:gogof, 'files/gogof.png')
 Image.register(:gogot, 'files/gogot.png')
+
 #液晶
+Image.register(:rare2_1, 'files/rare2_1.png')
+Image.register(:rare2_2, 'files/rare2_2.png')
+Image.register(:rare2_3, 'files/rare2_3.png')
+Image.register(:rare2_4che, 'files/rare2_4che.png')
+Image.register(:rare2_4sui, 'files/rare2_4sui.png')
+
 Image.register(:title, 'files/title.png')
 Image.register(:isi1, 'files/isi1.png')
 Image.register(:isi2, 'files/isi2.png')
 Image.register(:isi3, 'files/isi3.png')
+Image.register(:isi3hazure, 'files/isi3hazure.png')
 Image.register(:isi3rep, 'files/isi3rep.png')
 Image.register(:isi4bell, 'files/isi4bell.png')
 Image.register(:sougen, 'files/sougen.png')
 Image.register(:chest1, 'files/Chest1.png')
 Image.register(:chest2, 'files/Chest2.png')
+Image.register(:test, 'files/rare1_1.png')
+
 #BONUS
 Image.register(:chestbonus, 'files/chestbonus.png')
 Image.register(:BIGBONUS, 'files/BIGBONUS.png')
-
 Sound.register(:bet, 'sounds/bet.wav')
 Sound.register(:start, 'sounds/start.wav')
 Sound.register(:stop, 'sounds/stop.wav')
@@ -62,6 +71,9 @@ Window.load_resources do
   gako = 0 #ガコ0 なし 1音待機 2ランプ点灯
   nbox = 0 #REG中宝箱
   rbox = 0 #REG中宝箱レア
+  ensyutusentaku = 0 #演出選択
+  ensyutuflug = 0 #演出の有無
+
   Window.loop do
 
     #flug = 0 回転中
@@ -79,6 +91,7 @@ Window.load_resources do
     # 1/256BIG 10
     #ハズレ 7
 
+    
 
     #リール
     Window.draw(142, x+15, Image[:RenoL])
@@ -90,7 +103,58 @@ Window.load_resources do
 
 
     #演出
-    if koyaku == 8 #リプレイ
+  if koyaku == 3 || koyaku == 88 #スイカ
+    if ensyutuflug == 0
+        ensyutusentaku = rand(8)
+        ensyutuflug = 1
+    end
+    if ensyutusentaku >= 0
+      if flug1 + flug2 + flug3 == 0
+        Window.draw(142, 19, Image[:rare2_1])
+      elsif flug1 + flug2 + flug3 == 1
+        Window.draw(142, 19, Image[:rare2_2])
+      elsif flug1 + flug2 + flug3 == 2
+        Window.draw(142, 19, Image[:rare2_3])
+      else 
+        Window.draw(142, 19, Image[:rare2_4sui])
+      end
+    else
+    Window.draw(a+da, 19, Image[:sougen])
+    a += da
+      if a <= -350 || a >= 142
+        da = -da
+      end       
+    end
+
+  elsif koyaku == 2 || koyaku == 4  #リンゴ
+    if ensyutuflug == 0
+        ensyutusentaku = rand(8)
+        ensyutuflug = 1
+    end
+    if ensyutusentaku != 0
+      if flug1 + flug2 + flug3 == 0
+        Window.draw(142, 19, Image[:rare2_1])
+      elsif flug1 + flug2 + flug3 == 1
+        Window.draw(142, 19, Image[:rare2_2]) 
+      elsif flug1 + flug2 + flug3 == 2
+        Window.draw(142, 19, Image[:rare2_3])
+      else 
+        Window.draw(142, 19, Image[:rare2_4che])
+      end
+    else
+    Window.draw(a+da, 19, Image[:sougen])
+    a += da
+      if a <= -350 || a >= 142
+        da = -da
+      end       
+    end
+
+  elsif koyaku == 8 #リプレイ
+    if ensyutuflug == 0
+      ensyutusentaku = rand(3)
+      ensyutuflug = 1
+    end
+    if ensyutusentaku <= 1
       if flug1 + flug2 + flug3 == 0
         Window.draw(142, 19, Image[:isi1])
       elsif flug1 + flug2 + flug3 == 1
@@ -98,23 +162,51 @@ Window.load_resources do
       else
         Window.draw(142, 19, Image[:isi3rep])
       end
-    elsif koyaku == 6 || koyaku == 66 #ベル
+    else
+      Window.draw(a+da, 19, Image[:sougen])
+      a += da
+        if a <= -350 || a >= 142
+          da = -da
+        end       
+    end
+
+  elsif koyaku == 6 || koyaku == 66 #ベル
+    if flug1 + flug2 + flug3 == 0
+      Window.draw(142, 19, Image[:isi1])
+    elsif flug1 + flug2 + flug3 == 1
+      Window.draw(142, 19, Image[:isi2]) 
+    elsif flug1 + flug2 + flug3 == 2
+      Window.draw(142, 19, Image[:isi3])       
+    else
+      Window.draw(142, 19, Image[:isi4bell])           
+    end
+  elsif koyaku == 7  #ハズレ
+    if ensyutuflug == 0
+        ensyutusentaku = rand(8)
+        ensyutuflug = 1
+    end
+    if ensyutusentaku == 0
       if flug1 + flug2 + flug3 == 0
         Window.draw(142, 19, Image[:isi1])
       elsif flug1 + flug2 + flug3 == 1
         Window.draw(142, 19, Image[:isi2]) 
-      elsif flug1 + flug2 + flug3 == 2
-        Window.draw(142, 19, Image[:isi3])       
       else
-        Window.draw(142, 19, Image[:isi4bell])           
+        Window.draw(142, 19, Image[:isi3hazure])
       end
     else
-      Window.draw(a+da, 19, Image[:sougen])
-      a += da
+    Window.draw(a+da, 19, Image[:sougen])
+    a += da
       if a <= -350 || a >= 142
         da = -da
-      end
+      end       
     end
+  else
+    Window.draw(a+da, 19, Image[:sougen])
+    a += da
+    if a <= -350 || a >= 142
+      da = -da
+    end
+  end
 
     #ボーナス中
     if zyoutai == 2 && zbonus == 2  #reg
@@ -433,7 +525,7 @@ Window.load_resources do
       samai -= 3
       Sound[:bet].play
       if zyoutai != 1
-        koyaku = 7
+        koyaku = -1
       end
     end
 
@@ -483,6 +575,7 @@ Window.load_resources do
       flug1 = 0
       flug2 = 0
       flug3 = 0
+      ensyutuflug = 0
       random = rand(8192)
       if tyusen == 0 && zyoutai == 0
         if random <= 0 # 1/8192 中リンゴ
@@ -499,13 +592,13 @@ Window.load_resources do
           koyaku = 5
         elsif random <= 762 # 1/16ベル
           koyaku = 6
-        elsif random <= 1274 # 1/16リプ
+        elsif random <= 1786 # 1/8リプ
           koyaku = 8
-        elsif random <= 1302 # 1/512 REG 1290
+        elsif random <= 1802 # 1/512 REG 1802
           koyaku = 9
           zyoutai = 1
           gako = 1
-        elsif random <= 1334 # 1/256 BIG 1322
+        elsif random <= 1834 # 1/256 BIG 1834
           koyaku = 10
           zyoutai = 1
           gako = 1
@@ -516,7 +609,7 @@ Window.load_resources do
 
       if zyoutai == 2
         if last >= 1
-          random = rand(30)
+          random = rand(20)
           if random != 0
             koyaku = 6
           else
